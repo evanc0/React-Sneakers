@@ -3,7 +3,7 @@ import cn from "classnames"
 
 function Drawer() {
     return(
-        <div style={{display: ''}} className={styles.overlay}>
+        <div style={{display: 'none'}} className={styles.overlay}>
             <div className={styles.drawer}>
             <h2 className={cn("d-flex", "mb-30", "justify-between")}>Корзина  <img className={cn("cu-p")} src="/img/btn-remove.svg" alt="Remove" /></h2>
 
