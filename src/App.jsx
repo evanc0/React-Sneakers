@@ -3,21 +3,42 @@ import cn from "classnames";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 import Card from "./components/Card/Card";
+import { useState } from "react";
 // import './style.module.scss'
 
 const arr = [
-  { title: "Мужские Кроссовки Nike Blazer Mid Suede", price: 12999, imageUrl: '/img/sneakers/1.jpg'},
-  { title: "Мужские Кроссовки Nike Air Max 270", price: 15600, imageUrl: '/img/sneakers/2.jpg' },
-  { title: "Мужские Кроссовки Nike Blazer Mid Suede", price: 8499, imageUrl: '/img/sneakers/3.jpg' },
-  { title: "Кроссовки Puma X Aka Boku Future Rider", price: 8999, imageUrl: '/img/sneakers/4.jpg' },
+  {
+    title: "Мужские Кроссовки Nike Blazer Mid Suede",
+    price: 12999,
+    imageUrl: "/img/sneakers/1.jpg",
+  },
+  {
+    title: "Мужские Кроссовки Nike Air Max 270",
+    price: 15600,
+    imageUrl: "/img/sneakers/2.jpg",
+  },
+  {
+    title: "Мужские Кроссовки Nike Blazer Mid Suede",
+    price: 8499,
+    imageUrl: "/img/sneakers/3.jpg",
+  },
+  {
+    title: "Кроссовки Puma X Aka Boku Future Rider",
+    price: 8999,
+    imageUrl: "/img/sneakers/4.jpg",
+  },
 ];
 console.log(arr);
 
 function App() {
+  const [cartOpened, setCartOpened] = useState(false)
+
+
   return (
     <div className={cn(styles.wrapper, "clear")}>
-      <Drawer />
-      <Header />
+
+     {cartOpened && <Drawer onClose={() => setCartOpened(false)}/>}
+      <Header onClickCart={() => setCartOpened(true)}/>
 
       <div className={cn(styles.content, "p-40")}>
         <div className="d-flex align-center justify-between mb-40">
@@ -29,16 +50,16 @@ function App() {
         </div>
 
         <div className="d-flex">
-
           {arr.map((obj) => (
-          <Card 
-            key={obj.index}
-            title={obj.title}
-            price={obj.price}
-            imageUrl={obj.imageUrl}
-            onClick={() => console.log(obj)}
-          />
-        ))}
+            <Card
+              key={obj.index}
+              title={obj.title}
+              price={obj.price}
+              imageUrl={obj.imageUrl}
+              onFavorite={() => console.log("Добавили в закладки")}
+              onPlus={() => console.log("Нажали на плюс")}
+            />
+          ))}
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
 import styles from "../style.module.scss"
 import cn from "classnames"
 
-function Header() {
+function Header(props) {
+  console.log(props);
     return (
         <header className="d-flex justify-between align-center p-40">
         <div className={cn(styles.headerLeft, "d-flex", "align-center")}>
@@ -14,7 +15,7 @@ function Header() {
        
         
           <ul className="d-flex">
-            <li className="mr-30"> 
+            <li onClick={props.onClickCart} className={cn("mr-30", "cu-p")}> 
             <img width={18} height={18} src="/img/cart.svg"/>
               <span>1205 руб.</span>
             </li>
