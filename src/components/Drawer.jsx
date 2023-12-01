@@ -1,41 +1,28 @@
 import styles from "../style.module.scss"
 import cn from "classnames"
 
-function Drawer(props) {
+function Drawer({onClose, items = []}) {
     return(
         <div  className={styles.overlay}>
             <div className={styles.drawer}>
-            <h2 className={cn("d-flex", "mb-30", "justify-between")}>Корзина  <img onClick={props.onClose} className={cn("cu-p")} src="/img/btn-remove.svg" alt="Close" /></h2>
+            <h2 className={cn("d-flex", "mb-30", "justify-between")}>Корзина  <img onClick={onClose} className={cn("cu-p")} src="/img/btn-remove.svg" alt="Close" /></h2>
+           
             <div className={styles.items}>
-                <div className={cn(styles.cartItem, "d-flex", "align-center", "mb-20")}>
-                    {/* <img className="mr-20" width={70} height={70} src="/img/sneakers/1.jpg" alt="Sneakers" /> */}
-                    <div style={{ backgroundImage: 'url(/img/sneakers/1.jpg)'}} className={cn(styles.cartItemImg)}></div>
-                    <div className="mr-2 flex">
-                    <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-                    <b>12 999 руб.</b>
+                
+               { items.map(obj => (
+                    <div key={obj.index} className={cn(styles.cartItem, "d-flex", "align-center", "mb-20")}>
+                        <div style={{ backgroundImage: `url(${obj.imageUrl})`}} className={cn(styles.cartItemImg)}></div>
+                        <div className="mr-2 flex">
+                        <p className="mb-5">{obj.title}</p>
+                        <b>{obj.price} руб.</b>
+                        </div>
+                        <img className={cn(styles.removeBtn)} src="/img/btn-remove.svg" alt="Remove" />
                     </div>
-                    <img className={cn(styles.removeBtn)} src="/img/btn-remove.svg" alt="Remove" />
-                </div>
-                <div className={cn(styles.cartItem, "d-flex", "align-center", "mb-20")}>
-                    {/* <img className="mr-20" width={70} height={70} src="/img/sneakers/1.jpg" alt="Sneakers" /> */}
-                    <div style={{ backgroundImage: 'url(/img/sneakers/1.jpg)'}} className={cn(styles.cartItemImg)}></div>
-                    <div className="mr-2 flex">
-                    <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-                    <b>12 999 руб.</b>
-                    </div>
-                    <img className={cn(styles.removeBtn)} src="/img/btn-remove.svg" alt="Remove" />
-                </div>
-                <div className={cn(styles.cartItem, "d-flex", "align-center", "mb-20")}>
-                    {/* <img className="mr-20" width={70} height={70} src="/img/sneakers/1.jpg" alt="Sneakers" /> */}
-                    <div style={{ backgroundImage: 'url(/img/sneakers/1.jpg)'}} className={cn(styles.cartItemImg)}></div>
-                    <div className="mr-2 flex">
-                    <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-                    <b>12 999 руб.</b>
-                    </div>
-                    <img className={cn(styles.removeBtn)} src="/img/btn-remove.svg" alt="Remove" />
-                </div>
-            
+                ))}
+                
+                
             </div>
+
             <div className={cn(styles.cartTotalBlock)}>
                 <ul className={cn(styles.cartTotalBlock)}>
                     <li>

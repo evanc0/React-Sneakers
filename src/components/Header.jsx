@@ -2,7 +2,6 @@ import styles from "../style.module.scss"
 import cn from "classnames"
 
 function Header(props) {
-  console.log(props);
     return (
         <header className="d-flex justify-between align-center p-40">
         <div className={cn(styles.headerLeft, "d-flex", "align-center")}>

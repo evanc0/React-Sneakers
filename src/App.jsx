@@ -3,41 +3,56 @@ import cn from "classnames";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 import Card from "./components/Card/Card";
-import { useState } from "react";
-// import './style.module.scss'
-
-const arr = [
-  {
-    title: "Мужские Кроссовки Nike Blazer Mid Suede",
-    price: 12999,
-    imageUrl: "/img/sneakers/1.jpg",
-  },
-  {
-    title: "Мужские Кроссовки Nike Air Max 270",
-    price: 15600,
-    imageUrl: "/img/sneakers/2.jpg",
-  },
-  {
-    title: "Мужские Кроссовки Nike Blazer Mid Suede",
-    price: 8499,
-    imageUrl: "/img/sneakers/3.jpg",
-  },
-  {
-    title: "Кроссовки Puma X Aka Boku Future Rider",
-    price: 8999,
-    imageUrl: "/img/sneakers/4.jpg",
-  },
-];
-console.log(arr);
+import { useEffect, useState } from "react";
 
 function App() {
+
+  const [items, setItems] = useState([])
+  const [cartItems, setCartItems] = useState([])
   const [cartOpened, setCartOpened] = useState(false)
 
+  useEffect(()=> {
+    fetch('https://656a227bde53105b0dd82fef.mockapi.io/items').then(res => {
+      return res.json()
+    }).then(json => {
+      const test = json.map((obj,index) => ({
+       ...obj,
+       id: index + 1
+      }))
+      setItems(test)
+      console.log(test);
+    })
+  },[])
+
+
+  const onAddToCart = (item) => {
+    console.log(item);
+    const idToCheck  = item.id
+    console.log(idToCheck, "idToCheck");
+    console.log(cartItems, "idToCheck");
+
+    const hasItem = cartItems.some(product => product.id === idToCheck);
+    console.log(hasItem);
+    // setCartItems(prev => [...prev, item]);
+
+
+    if (hasItem) {
+      const updatedCartItems = cartItems.filter(testing => testing.id !== idToCheck);
+      console.log(updatedCartItems, "повторное нажатие ");
+      setCartItems(updatedCartItems)
+    } else {
+      setCartItems(prev => [...prev, item]);
+    }
+    
+  }
+
+
+    
 
   return (
     <div className={cn(styles.wrapper, "clear")}>
 
-     {cartOpened && <Drawer onClose={() => setCartOpened(false)}/>}
+     {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)}/>}
       <Header onClickCart={() => setCartOpened(true)}/>
 
       <div className={cn(styles.content, "p-40")}>
@@ -49,21 +64,22 @@ function App() {
           </div>
         </div>
 
-        <div className="d-flex">
-          {arr.map((obj) => (
+        <div className={cn("d-flex", "flex-wrap")}>
+          {items.map((item) => (
             <Card
-              key={obj.index}
-              title={obj.title}
-              price={obj.price}
-              imageUrl={obj.imageUrl}
+              id={item.id}
+              key={item.index}
+              title={item.title}
+              price={item.price}
+              imageUrl={item.imageUrl}
               onFavorite={() => console.log("Добавили в закладки")}
-              onPlus={() => console.log("Нажали на плюс")}
+              onPlus={onAddToCart}
             />
           ))}
         </div>
       </div>
     </div>
-  );
+  );              
 }
 
 export default App;
