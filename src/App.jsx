@@ -16,27 +16,43 @@ function App() {
   const [favorites, setFavorites] = useState([])
   const [searchValue, setSearchValue] = useState("")
   const [cartOpened, setCartOpened] = useState(false)
-  console.log(location);
+  const [isLoading, setIsLoading] = useState(true)
+  // console.log(location);
 
 
   useEffect(()=> {
-    axios.get('https://656a227bde53105b0dd82fef.mockapi.io/items').then((res)=>{
-       setItems(res.data)
-    });
+    async function fetchData() {
+      const cartResponse =  await axios.get('https://656a227bde53105b0dd82fef.mockapi.io/cart');
+      const favoritesResponse =  await axios.get('https://656a220dde53105b0dd82ef7.mockapi.io/favorites'); // для того чтобы фул проект был бесплатный, тут идёт адресс на второй аккаунт mockapi (авторизовался через google - ранее через github)
+      const itemsResponse =  await axios.get('https://656a227bde53105b0dd82fef.mockapi.io/items');
+      
+      setIsLoading(false)
+  
+      setCartItems(cartResponse.data)
+      setFavorites(favoritesResponse.data)
+      setItems(itemsResponse.data)
+      
+    }
 
-    axios.get('https://656a227bde53105b0dd82fef.mockapi.io/cart').then((res) => {
-      setCartItems(res.data)
-    })
-    axios.get('https://656a220dde53105b0dd82ef7.mockapi.io/favorites').then((res) => {   // для того чтобы фул проект был бесплатный, тут идёт адресс на второй аккаунт mockapi (авторизовался через google - ранее через github)
-      setFavorites(res.data)
-    })
-          
+    fetchData()
   },[])
 
 
-  const onAddToCart = (item) => {
-    axios.post('https://656a227bde53105b0dd82fef.mockapi.io/cart', item)
-    setCartItems(prev => [...prev, item])
+  const onAddToCart = (obj) => {
+    console.log(obj);
+    try {
+      if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
+        axios.delete(`https://656a227bde53105b0dd82fef.mockapi.io/cart/${obj.id}`)
+        setCartItems(prev => prev.filter(item => Number(item.id) !== Number(obj.id)))
+      } else {
+        axios.post('https://656a227bde53105b0dd82fef.mockapi.io/cart', obj)
+        setCartItems(prev => [...prev, obj])
+      }
+     
+
+    } catch(error) {
+      alert("Не удалось добавить товар в корзину")
+    }
   }
 
   const onRemoveItem = (id) => {
@@ -77,11 +93,13 @@ function App() {
       { location.pathname === "/" &&  
         <Home 
           items={items} 
+          cartItems={cartItems}
           searchValue={searchValue} 
           setSearchValue={setSearchValue} 
           onChangeSearchInput={onChangeSearchInput}
           onAddToFavorite={onAddToFavorite}
           onAddToCart={onAddToCart}
+          isLoading={isLoading}
         />
       }
       { location.pathname === "/favorites" &&  
