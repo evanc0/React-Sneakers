@@ -1,83 +1,98 @@
 import styles from "./style.module.scss";
+import {Route} from 'react-router-dom'
+import axios from "axios";
 import cn from "classnames";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
-import Card from "./components/Card/Card";
+import Home from "./pages/Home";
+import Favorites from "./pages/Favorites";
 import { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 
 function App() {
-
+  const location = useLocation();
   const [items, setItems] = useState([])
   const [cartItems, setCartItems] = useState([])
+  const [favorites, setFavorites] = useState([])
+  const [searchValue, setSearchValue] = useState("")
   const [cartOpened, setCartOpened] = useState(false)
+  console.log(location);
+
 
   useEffect(()=> {
-    fetch('https://656a227bde53105b0dd82fef.mockapi.io/items').then(res => {
-      return res.json()
-    }).then(json => {
-      const test = json.map((obj,index) => ({
-       ...obj,
-       id: index + 1
-      }))
-      setItems(test)
-      console.log(test);
+    axios.get('https://656a227bde53105b0dd82fef.mockapi.io/items').then((res)=>{
+       setItems(res.data)
+    });
+
+    axios.get('https://656a227bde53105b0dd82fef.mockapi.io/cart').then((res) => {
+      setCartItems(res.data)
     })
+    axios.get('https://656a220dde53105b0dd82ef7.mockapi.io/favorites').then((res) => {   // для того чтобы фул проект был бесплатный, тут идёт адресс на второй аккаунт mockapi (авторизовался через google - ранее через github)
+      setFavorites(res.data)
+    })
+          
   },[])
 
 
   const onAddToCart = (item) => {
-    console.log(item);
-    const idToCheck  = item.id
-    console.log(idToCheck, "idToCheck");
-    console.log(cartItems, "idToCheck");
-
-    const hasItem = cartItems.some(product => product.id === idToCheck);
-    console.log(hasItem);
-    // setCartItems(prev => [...prev, item]);
-
-
-    if (hasItem) {
-      const updatedCartItems = cartItems.filter(testing => testing.id !== idToCheck);
-      console.log(updatedCartItems, "повторное нажатие ");
-      setCartItems(updatedCartItems)
-    } else {
-      setCartItems(prev => [...prev, item]);
-    }
-    
+    axios.post('https://656a227bde53105b0dd82fef.mockapi.io/cart', item)
+    setCartItems(prev => [...prev, item])
   }
 
+  const onRemoveItem = (id) => {
+    axios.delete(`https://656a227bde53105b0dd82fef.mockapi.io/cart/${id}`)
+    setCartItems((prev) => prev.filter(item => item.id !== id));
+
+  }
+
+  const onChangeSearchInput = (event) => {
+    console.log(event.target.value)
+    setSearchValue(event.target.value);
+  }
+
+  const onAddToFavorite = async (obj) => {
+    console.log(obj);
+    
+    try {
+      if (favorites.find((favObj) => favObj.id === obj.id)) {
+        axios.delete(`https://656a220dde53105b0dd82ef7.mockapi.io/favorites/${obj.id}`);
+        // setFavorites(prev => prev.filter(item => item.id !== obj.id))
+      } else {
+        const {data} = await axios.post('https://656a220dde53105b0dd82ef7.mockapi.io/favorites', obj) // для того чтобы фул проект был бесплатный, тут идёт адресс на второй аккаунт mockapi (авторизовался через google - ранее через github)
+        setFavorites(prev => [...prev, data])
+      }
+
+    } catch(error) {
+      alert("Не удалось доабвить в избранное")
+    }
+  }
 
     
 
   return (
     <div className={cn(styles.wrapper, "clear")}>
 
-     {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)}/>}
+     {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem}/>}
       <Header onClickCart={() => setCartOpened(true)}/>
+      { location.pathname === "/" &&  
+        <Home 
+          items={items} 
+          searchValue={searchValue} 
+          setSearchValue={setSearchValue} 
+          onChangeSearchInput={onChangeSearchInput}
+          onAddToFavorite={onAddToFavorite}
+          onAddToCart={onAddToCart}
+        />
+      }
+      { location.pathname === "/favorites" &&  
+        <Favorites 
+          items={favorites}
+          onAddToFavorite={onAddToFavorite}
+        />
+      }
+     
 
-      <div className={cn(styles.content, "p-40")}>
-        <div className="d-flex align-center justify-between mb-40">
-          <h1>Все кроссовки</h1>
-          <div className={cn(styles.searchBlock, "d-flex")}>
-            <img src="/img/search.svg" alt="Search" />
-            <input placeholder="Поиск..." />
-          </div>
-        </div>
-
-        <div className={cn("d-flex", "flex-wrap")}>
-          {items.map((item) => (
-            <Card
-              id={item.id}
-              key={item.index}
-              title={item.title}
-              price={item.price}
-              imageUrl={item.imageUrl}
-              onFavorite={() => console.log("Добавили в закладки")}
-              onPlus={onAddToCart}
-            />
-          ))}
-        </div>
-      </div>
+      
     </div>
   );              
 }
