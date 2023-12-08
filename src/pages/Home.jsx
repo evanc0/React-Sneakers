@@ -1,21 +1,35 @@
 import Card from "../components/Card/Card";
 import styles from "../style.module.scss";
 import cn from "classnames";
+import AppContext from "../Context";
+import { useContext } from "react";
 
 
 
 function Home({items, cartItems, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart, isLoading}) {
+  const {isItemAdded} = useContext(AppContext)
+
+  const getIsAdded = (item) => {
+
+    if (isLoading) return true
+
+    return isItemAdded(item && item.id)
+  }
+  const blankArray = new Array(8).fill(0).map((item, index) => {
+    return {id: Date.now() + index}
+  });
 
   const renderItems = () => {
     const filteredItems = items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()));
-    return (isLoading ? [...Array(8)] : filteredItems).map((item, index) => (
+
+    return (isLoading ? blankArray : filteredItems).map((item, index) => (
       <Card
-          key={index}
+      {...item}
+          key={item?.id}
           onFavorite={(obj) => onAddToFavorite(obj)}
           onPlus={(obj) => onAddToCart(obj)}
-          added={cartItems.some((obj) => Number(obj.id) === Number(item.id))}
+          added={isItemAdded(item?.id)}
           loading={isLoading}
-          {...item}
       />
     ));
   };

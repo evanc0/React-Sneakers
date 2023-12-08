@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Card.module.scss"
 import cn from "classnames"
 import ContentLoader from "react-content-loader"
 
 function Card({id, title, imageUrl, price,  onFavorite, onPlus, favorited = false, added = false, loading = false }) {
+  console.log(id, added);
   const [isAdded, setIsAdded] = useState(added);
   const [isFavorite, setIsFavorite] = useState(favorited);
-// console.log(id);
+
   const onClickPlus = () => {
     onPlus({title, imageUrl, price, id})
     setIsAdded(!isAdded)
@@ -17,6 +18,9 @@ function Card({id, title, imageUrl, price,  onFavorite, onPlus, favorited = fals
     setIsFavorite(!isFavorite)
   }
 
+  // useEffect(() => {
+  //   setIsAdded(added)
+  // },[added])
 
     return(
         <div className={styles.card}>
