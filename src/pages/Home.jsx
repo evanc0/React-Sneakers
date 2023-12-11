@@ -1,20 +1,22 @@
 import Card from "../components/Card/Card";
 import styles from "../style.module.scss";
 import cn from "classnames";
-import AppContext from "../Context";
-import { useContext } from "react";
+
+function Home({items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart, isLoading}) {
 
 
+  // const getIsAdded = (item) => {
 
-function Home({items, cartItems, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart, isLoading}) {
-  const {isItemAdded} = useContext(AppContext)
+  //   if (isLoading) return true
 
-  const getIsAdded = (item) => {
+  //   return isItemAdded(item && item.id)
+  // }
 
-    if (isLoading) return true
-
-    return isItemAdded(item && item.id)
-  }
+   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   
   const blankArray = new Array(8).fill(0).map((item, index) => {
     return {id: Date.now() + index}
   });
@@ -28,7 +30,6 @@ function Home({items, cartItems, searchValue, setSearchValue, onChangeSearchInpu
           key={item?.id}
           onFavorite={(obj) => onAddToFavorite(obj)}
           onPlus={(obj) => onAddToCart(obj)}
-          added={isItemAdded(item?.id)}
           loading={isLoading}
       />
     ));

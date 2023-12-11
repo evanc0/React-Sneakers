@@ -6,9 +6,9 @@ import AppContext from "../Context";
 
 
 
-function Favorites({ onAddToFavorite}) {
+function Favorites() {
 
-  const {favorites} = useContext(AppContext)
+  const {favorites, onAddToFavorite} = useContext(AppContext)
   
 
     return (

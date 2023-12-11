@@ -10,9 +10,10 @@ import { createContext, useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import AppContext from "./Context";
 
-const cartUrl = "https://656a227bde53105b0dd82fef.mockapi.io/cart"
-const itemUrl = "https://656a227bde53105b0dd82fef.mockapi.io/items"
-const favoritesUrl = "https://656a220dde53105b0dd82ef7.mockapi.io/favorites"
+const cartUrl = "https://656a227bde53105b0dd82fef.mockapi.io/cart" // ресурс из mockapi из-за PUT, который позволяет полностью очистить ресурс
+const itemUrl = "https://333cc2b740686014.mokky.dev/items"
+const favoritesUrl = "https://333cc2b740686014.mokky.dev/favorites"
+const ordersUrl = "https://333cc2b740686014.mokky.dev/orders" 
 
 
 // console.log(AppContext);
@@ -31,7 +32,7 @@ function App() {
   useEffect(()=> {
     async function fetchData() {
       const cartResponse =  await axios.get(cartUrl);
-      const favoritesResponse =  await axios.get(favoritesUrl); // для того чтобы фул проект был бесплатный, тут идёт адресс на второй аккаунт mockapi (авторизовался через google - ранее через github)
+      const favoritesResponse =  await axios.get(favoritesUrl); 
       const itemsResponse =  await axios.get(itemUrl);
       
       
@@ -57,8 +58,6 @@ function App() {
         axios.post(cartUrl, obj)
         setCartItems(prev => [...prev, obj])
       }
-     
-
     } catch(error) {
       alert("Не удалось добавить товар в корзину")
     }
@@ -79,9 +78,9 @@ function App() {
     console.log(obj);
     
     try {
-      if (favorites.find((favObj) => favObj.id === obj.id)) {
-        axios.delete(`${favoritesUrl}/${obj.id}`);
-        // setFavorites(prev => prev.filter(item => item.id !== obj.id))
+      if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
+         await axios.delete(`${favoritesUrl}/${obj.id}`);
+        // setFavorites((prev) => prev.filter(item => item.id !== obj.id))
       } else {
         const {data} = await axios.post(favoritesUrl, obj) // для того чтобы фул проект был бесплатный, тут идёт адресс на второй аккаунт mockapi (авторизовался через google - ранее через github)
         setFavorites(prev => [...prev, data])
@@ -99,7 +98,7 @@ function App() {
     
 
   return (
-    <AppContext.Provider value={{items, cartItems, favorites, isItemAdded}}>
+    <AppContext.Provider value={{items, cartItems, favorites, isItemAdded, onAddToFavorite, setCartOpened, setCartItems, ordersUrl, cartUrl}}>
     <div className={cn(styles.wrapper, "clear")}>
 
      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem}/>}
@@ -119,7 +118,6 @@ function App() {
       { location.pathname === "/favorites" &&  
         <Favorites 
          items={items}
-          onAddToFavorite={onAddToFavorite}
         />
       }
      
