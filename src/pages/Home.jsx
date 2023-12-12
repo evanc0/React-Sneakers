@@ -3,19 +3,6 @@ import styles from "../style.module.scss";
 import cn from "classnames";
 
 function Home({items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart, isLoading}) {
-
-
-  // const getIsAdded = (item) => {
-
-  //   if (isLoading) return true
-
-  //   return isItemAdded(item && item.id)
-  // }
-
-   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   // Мусор какой то ебаный, првоерить удалить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    
   const blankArray = new Array(8).fill(0).map((item, index) => {
     return {id: Date.now() + index}

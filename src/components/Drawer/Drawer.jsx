@@ -1,20 +1,25 @@
 import { useContext, useState } from "react";
 import axios from "axios";
-
-import styles from "../style.module.scss"
 import cn from "classnames"
-import Info from "./Info";
-import AppContext from "../Context";
+
+import Info from "../Info";
+import AppContext from "../../Context";
+import { useCart } from "../../hooks/useCart";
+
+import stylesDrawer from './Drawer.module.scss'
+import styles from "../../style.module.scss"
 
 const delay = (ms) => new Promise((resolve) => {
     setTimeout(resolve, ms)
 })
 
-function Drawer({onClose, onRemove, items = []}) {
-    const {cartItems, setCartItems, ordersUrl, cartUrl} = useContext(AppContext)
+function Drawer({onClose, onRemove, items = [], opened}) {
+    const {cartItems, setCartItems, totalPrice} = useCart() // используем свой кастомный хук
+    const {ordersUrl, cartUrl} = useContext(AppContext)
     const [orderId, setOrderId ] = useState(null);
     const [isOrderComplete, setIsOrderComplete ] = useState(false);
     const [isLoading, setIsLoading ] = useState(false);
+     
 
     const onClickOrder = async () => {
         try{
@@ -43,8 +48,8 @@ function Drawer({onClose, onRemove, items = []}) {
     }
 
     return(
-        <div  className={styles.overlay}>
-            <div className={styles.drawer}>
+        <div  className={cn(stylesDrawer.overlay, opened ? stylesDrawer.overlayVisible : "")}>
+            <div className={stylesDrawer.drawer}>
             <h2 className={cn("d-flex", "mb-30", "justify-between")}>Корзина  <img onClick={onClose} className={cn("cu-p")} src="/img/btn-remove.svg" alt="Close" /></h2>
 
             {items.length > 0 ? (
@@ -66,12 +71,12 @@ function Drawer({onClose, onRemove, items = []}) {
                             <li>
                             <span>Итого:</span>
                             <div></div>
-                            <b>21 498 руб.</b>
+                            <b>{totalPrice} руб.</b>
                             </li>
                             <li>
                             <span>Налог 5%:</span>
                             <div></div>
-                            <b>1074 руб.</b>
+                            <b>{totalPrice / 100 * 5} руб.</b>
                             </li>
                         </ul>
                         <button className={cn(styles.greenButton)} disabled={isLoading} onClick={onClickOrder}>Оформить заказ <img src="/img/arrow.svg" alt="Arrow" /></button>

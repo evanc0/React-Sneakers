@@ -17,6 +17,9 @@ const router = createBrowserRouter([
   {
     path: "/favorites",
     element: <App/>
+  }, {
+    path: "/orders",
+    element: <App/>
   }
 ]);
 
