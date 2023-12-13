@@ -51,12 +51,25 @@ function App() {
   const onAddToCart = async (obj) => {
     console.log(obj);
     try {
-      if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
-        setCartItems(prev => prev.filter(item => Number(item.id) !== Number(obj.id)))
-        await axios.delete(`${cartUrl}/${obj.id}`)
+      const findItem = cartItems.find((item) => Number(item.parentId) === Number(obj.id));
+      if (findItem) {
+        setCartItems(prev => prev.filter(item => Number(item.parentId) !== Number(obj.id)))
+        await axios.delete(`${cartUrl}/${findItem.id}`)
       } else {
+        console.log("ЧТо было! ",obj);
         setCartItems(prev => [...prev, obj])
-        await axios.post(cartUrl, obj)
+        const { data } = await axios.post(cartUrl, obj)
+        console.log("ЧТо стало! ",data);
+        setCartItems(prev => prev.map(item => {
+          if(item.parentId === data.parentId) {
+            return {
+              ...item,
+              id: data.id
+            };
+          }
+          return item;
+        }))
+        console.log("Сама корзина!",cartItems);
       }
     } catch(error) {
       alert("Не удалось добавить товар в корзину")
@@ -67,7 +80,7 @@ function App() {
   const onRemoveItem = (id) => {
     try {
       axios.delete(`${cartUrl}/${id}`)
-    setCartItems((prev) => prev.filter(item => item.id !== id));
+    setCartItems((prev) => prev.filter(item => Number(item.id) !== Number(id)));
     } catch (error) {
       alert("Ошибка при удалении из корзины")
       console.error(error);

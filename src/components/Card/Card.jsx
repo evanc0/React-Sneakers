@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./Card.module.scss"
 import cn from "classnames"
 import ContentLoader from "react-content-loader"
@@ -11,7 +11,6 @@ function Card({id, title, imageUrl, price,  onFavorite, onPlus, favorited = fals
   const [isFavorite, setIsFavorite] = useState(favorited);
   const obj = { id, parentId:id, title, imageUrl, price};
 
-  // console.log(title, isItemAdded(id));
 
   const onClickPlus = () => {
     onPlus(obj)

@@ -2,16 +2,20 @@
   "name": "react-sneakers-top",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://evanc0.github.io/React-Sneakers",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages - d build"
   },
   "dependencies": {
     "axios": "^1.6.2",
     "classnames": "^2.3.2",
+    "gh-pages": "^6.1.0",
     "macro-css": "^1.0.5",
     "react": "^18.2.0",
     "react-content-loader": "^6.2.1",

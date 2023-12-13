@@ -5,7 +5,7 @@ import { useCart } from "../hooks/useCart";
 
 function Header(props) {
   const { totalPrice } = useCart() // используем свой кастомный хук
-  console.log(totalPrice);
+  // console.log(totalPrice);
 
 
     return (
