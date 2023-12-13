@@ -46,7 +46,7 @@ function Card({id, title, imageUrl, price,  onFavorite, onPlus, favorited = fals
          <>
             <div className={styles.favorite} onClick={onClickFavorite}>
               { onFavorite && <img 
-                src={isFavorite ? "/img/heart-liked.svg" : "/img/heart-unliked.svg"} 
+                src={isFavorite ? "img/heart-liked.svg" : "img/heart-unliked.svg"} 
                 alt="Unliked"  />  
               }
             </div>
@@ -60,7 +60,7 @@ function Card({id, title, imageUrl, price,  onFavorite, onPlus, favorited = fals
               { onPlus && <img 
                 className={cn(styles.plus)} 
                 onClick={onClickPlus}  
-                src={isItemAdded(id) ? "/img/btn-cheked.svg" : "/img/btn-plus.svg"} 
+                src={isItemAdded(id) ? "img/btn-cheked.svg" : "img/btn-plus.svg"} 
                 alt="Plus" 
               />}
             </div>
