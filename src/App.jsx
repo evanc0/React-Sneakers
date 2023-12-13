@@ -56,10 +56,8 @@ function App() {
         setCartItems(prev => prev.filter(item => Number(item.parentId) !== Number(obj.id)))
         await axios.delete(`${cartUrl}/${findItem.id}`)
       } else {
-        console.log("ЧТо было! ",obj);
         setCartItems(prev => [...prev, obj])
         const { data } = await axios.post(cartUrl, obj)
-        console.log("ЧТо стало! ",data);
         setCartItems(prev => prev.map(item => {
           if(item.parentId === data.parentId) {
             return {
@@ -69,7 +67,6 @@ function App() {
           }
           return item;
         }))
-        console.log("Сама корзина!",cartItems);
       }
     } catch(error) {
       alert("Не удалось добавить товар в корзину")
@@ -115,10 +112,14 @@ function App() {
     return cartItems.some((obj) => Number(obj.parentId) === Number(id))
   }
 
+  const isItemFavorites = (id) => {
+    return favorites.some((obj) => Number(obj.parentId) === Number(id))
+  }
+
     
 
   return (
-    <AppContext.Provider value={{items, cartItems, favorites, isItemAdded, onAddToFavorite, setCartOpened, setCartItems, ordersUrl, cartUrl, onAddToCart}}>
+    <AppContext.Provider value={{items, cartItems, favorites, isItemAdded, onAddToFavorite, setCartOpened, setCartItems, ordersUrl, cartUrl, onAddToCart, isItemFavorites}}>
     <div className={cn(styles.wrapper, "clear")}>
 
       {/* {cartOpened && } */}
@@ -142,6 +143,7 @@ function App() {
           onAddToFavorite={onAddToFavorite}
           onAddToCart={onAddToCart}
           isLoading={isLoading}
+          isItemFavorites={isItemFavorites}
         />
       }
       { location.pathname === "/favorites" &&  
@@ -156,6 +158,8 @@ function App() {
 
       
     </div>
+
+    
     </AppContext.Provider>
   );              
 }

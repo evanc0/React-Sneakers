@@ -2,7 +2,7 @@ import Card from "../components/Card/Card";
 import styles from "../style.module.scss";
 import cn from "classnames";
 
-function Home({items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart, isLoading}) {
+function Home({items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart, isLoading, isItemFavorites}) {
    
   const blankArray = new Array(8).fill(0).map((item, index) => {
     return {id: Date.now() + index}
@@ -16,6 +16,7 @@ function Home({items, searchValue, setSearchValue, onChangeSearchInput, onAddToF
       {...item}
           key={item?.id}
           onFavorite={(obj) => onAddToFavorite(obj)}
+          favorited={isItemFavorites(item?.id)}
           onPlus={(obj) => onAddToCart(obj)}
           loading={isLoading}
       />

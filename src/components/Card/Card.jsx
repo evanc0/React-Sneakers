@@ -7,7 +7,7 @@ import { useContext } from "react";
 
 function Card({id, title, imageUrl, price,  onFavorite, onPlus, favorited = false, loading = false}) {
   
-  const {isItemAdded} = useContext(AppContext)
+  const {isItemAdded, } = useContext(AppContext)
   const [isFavorite, setIsFavorite] = useState(favorited);
   const obj = { id, parentId:id, title, imageUrl, price};
 

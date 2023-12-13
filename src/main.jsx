@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     element: <App/>
   },
   
-], { basename: '/React-Sneakers' });
+], { basename: '/React-Sneakers/' });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
